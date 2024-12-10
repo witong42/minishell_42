@@ -6,7 +6,7 @@
 /*   By: witong <witong@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 11:04:51 by witong            #+#    #+#             */
-/*   Updated: 2024/12/10 12:34:43 by witong           ###   ########.fr       */
+/*   Updated: 2024/12/10 14:01:50 by witong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,23 @@ int	count_line(char **array)
 	return (i);
 }
 
+void	free_array(char **array, int size)
+{
+	int	i;
+
+	i = 0;
+	while (i < size)
+	{
+		free(array[i]);
+		i++;
+	}
+	free(array);
+}
+
 char	**arraydup(char **array)
 {
 	char	**dup;
 	int		lc;
-	int		i;
 
 	lc = count_line(array);
 	dup = (char **)malloc(sizeof(char*) * (lc + 1));
@@ -36,16 +48,12 @@ char	**arraydup(char **array)
 	lc = 0;
 	while (array[lc])
 	{
-		dup[lc] = strdup(array[lc]); //replace by ft_strdup
-		//if(!dup[lc])
-			//free
-		i = 0;
-		while (array[lc][i])
+		dup[lc] = ft_strdup(array[lc]);
+		if (!dup[lc])
 		{
-			dup[lc][i] = array[lc][i];
-			i++;
+			free_array(dup, lc);
+			return (NULL);
 		}
-		dup[lc][i] = '\0';
 		lc++;
 	}
 	return (dup);
@@ -57,15 +65,13 @@ int	main(int ac, char **av, char **envp)
 	(void) av;
 	(void) envp;
 	char *input;
-	int	i;
-	char **env;
+	// int	i;
+	// char **env;
 
-	i = 0;
-	env = arraydup(envp);
-	if (!env)
-		printf("Error");
-	while (env[i])
-		printf("%s\n", env[i++]);
+	// i = 0;
+	// env = arraydup(envp);
+	// while (env[i])
+	// 	printf("%s\n", env[i++]);
 	while (1)
 	{
 		input = readline("minishell>");

@@ -1,26 +1,55 @@
-NAME	= minishell
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: witong <witong@student.42.fr>              +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2024/12/06 18:05:29 by arotondo          #+#    #+#              #
+#    Updated: 2024/12/10 14:03:54 by witong           ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
 
-SRCS	= main.c
-OBJS	= $(SRCS:%.c=%.o)
+NAME = minishell
 
-CC		= gcc
-CFLAGS	= -Wall -Wextra -Werror
-RM		= rm -f
+SRC_DIR = src
+OBJ_DIR = obj
+INC_DIR = include
+LIBFT_DIR = libft
 
-all : $(NAME)
+SRC = main.c
+OBJ = $(SRC:%.c=$(OBJ_DIR)/%.o)
 
-%.o : %.c
-	$(CC) $(CFLAGS) -c $<  -o $@
+# SFLAGS = -fsanitize=address -g
+CFLAGS = -Wall -Wextra -Werror -g3 -I $(INC_DIR) -I $(LIBFT_DIR)
+LIBS = -L $(LIBFT_DIR) -lft -lreadline
 
-$(NAME) : $(OBJS)
-	$(CC) $(CFLAGS) $(OBJS) -lreadline -o $(NAME)
+DEF_COLOR = \033[0;39m
+GREEN = \033[0;92m
 
-clean :
-	$(RM) $(OBJS)
+all: $(NAME)
 
-fclean : clean
-	$(RM) $(NAME)
+$(NAME): $(OBJ)
+	@make -C $(LIBFT_DIR)
+	@$(CC) $(CFLAGS) $(OBJ) $(LIBS) -o $(NAME)
+	@echo "${GREEN}Compilation of $(NAME) done.${DEF_COLOR}"
 
-re : fclean all
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c $(INC_DIR)/minishell.h | $(OBJ_DIR)
+	@$(CC) $(CFLAGS) -c $< -o $@
 
-.PHONY : all clean fclean re
+$(OBJ_DIR):
+	@mkdir -p $(OBJ_DIR)
+
+clean:
+	@make -C $(LIBFT_DIR) clean
+	@rm -rf $(OBJ_DIR) $(BONUS_OBJ_DIR)
+	@echo "${GREEN}Files clean up done.{DEF_COLOR}"
+
+fclean: clean
+	@make -C $(LIBFT_DIR) fclean
+	@rm -rf $(NAME) $(NAME_BONUS)
+	@echo "${GREEN}Clean up done.{DEF_COLOR}"
+
+re: fclean all
+
+.PHONY: all bonus clean fclean re
