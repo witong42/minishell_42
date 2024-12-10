@@ -1,6 +1,7 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
+# include "../libft/libft.h"
 # include <unistd.h>
 # include <readline/readline.h>
 # include <readline/history.h>
@@ -29,5 +30,12 @@ typedef enum e_tok_type
 	UNKNOWN,
 	END,
 }		t_tok_type;
+
+typedef struct s_token
+{
+	t_tok_type type;
+	char	*value;
+	struct s_token *next;
+}	t_token;
 
 #endif
