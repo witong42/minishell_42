@@ -6,21 +6,34 @@
 /*   By: witong <witong@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/11 10:46:56 by witong            #+#    #+#             */
-/*   Updated: 2024/12/11 10:50:28 by witong           ###   ########.fr       */
+/*   Updated: 2024/12/11 16:28:48 by witong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-static t_tok_type	check_type(char c)
+#include "../../include/minishell.h"
+
+t_token *lexer(char *line)
 {
+	t_token *tokens;
+	int i;
 
-}
-
-static t_tok_type	check_double_ops(const char *line, int i)
-{
-	
-}
-
-t_token	*lexer(const char *line)
-{
-
+	i = 0;
+	tokens = NULL;
+	while (line[i])
+	{
+		if (ft_isspace(line[i]))
+			i++;
+		else if (check_double_ops(line, i) != UNKNOWN)
+			handle_double_ops(line, &i, &tokens);
+		else if (is_redirection(line[i]))
+			handle_redirection(line, &i, &tokens);
+		// else if (line[i] == '\'' || line[i] == '\"')
+		// 	handle_quotes(line, &i, &tokens);
+		// else if (line[i] == '$')
+		// 	handle_dollar(line, &i, &tokens);
+		else
+			handle_word(line, &i, &tokens);
+	}
+	token_add_back(&tokens, create_token(END, NULL));
+	return tokens;
 }

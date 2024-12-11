@@ -6,7 +6,7 @@
 /*   By: witong <witong@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 14:17:15 by witong            #+#    #+#             */
-/*   Updated: 2024/12/11 10:42:53 by witong           ###   ########.fr       */
+/*   Updated: 2024/12/11 16:31:21 by witong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,10 @@ t_token	*create_token(t_tok_type type, char *value)
 	if (!new_token)
 		return (NULL);
 	new_token->type = type;
-	new_token->value = ft_strdup(value);
+	if (value)
+		new_token->value = ft_strdup(value);
+	else
+		new_token->value = NULL;
 	new_token->next = NULL;
 	return (new_token);
 }

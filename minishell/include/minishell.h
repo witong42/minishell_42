@@ -20,7 +20,7 @@ typedef enum e_tok_type
 {
 	WORD,
 	PIPE,
-	SIMPLEQ,
+	SINGLEQ,
 	DOUBLEQ,
 	DOLLAR,
 	REDIRIN,
@@ -39,12 +39,24 @@ typedef struct s_token
 }	t_token;
 
 // lexer and utils
-t_token	*lexer(const char *line);
+t_token	*lexer(char *line);
 t_token	*create_token(t_tok_type type, char *value);
 void token_add_back(t_token **list, t_token *new_token);
 void print_tokens(t_token *token);
-int	ft_isspace(char c)
-int	is_special_char(char c)
+void handle_double_ops(const char *line, int *i, t_token **tokens);
+void handle_redirection(const char *line, int *i, t_token **tokens);
+void handle_quotes(const char *line, int *i, t_token **tokens);
+void handle_dollar(const char *line, int *i, t_token **tokens);
+void handle_word(const char *line, int *i, t_token **tokens);
+char *extract_word(const char *line, int *i);
+// char *extract_single_quote(const char *line, int *i);
+// char *extract_double_quote(const char *line, int *i);
+// char *extract_dollar(const char *line, int *i);
+t_tok_type	check_redirection(char c);
+t_tok_type	check_double_ops(const char *line, int i);
+int	ft_isspace(char c);
+int	is_redirection(char c);
+int	is_special_char(char c);
 
 
 char *ft_getenv(const char *name, char **envp);

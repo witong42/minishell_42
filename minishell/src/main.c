@@ -6,7 +6,7 @@
 /*   By: witong <witong@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 11:04:51 by witong            #+#    #+#             */
-/*   Updated: 2024/12/10 15:53:34 by witong           ###   ########.fr       */
+/*   Updated: 2024/12/11 16:13:04 by witong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ int	main(int ac, char **av, char **envp)
 	(void) av;
 	(void) envp;
 	char *input;
-	char *getenv_value;
+	t_token	*tokens;
 	// int	i;
 	//char **env;
 
@@ -96,11 +96,13 @@ int	main(int ac, char **av, char **envp)
 	//printf("%s\n", getenv_value);
 	while (1)
 	{
-		input = readline("minishell>");
+		input = readline("minishell> ");
 		if (!input)
 			break ;
 		if (*input != '\0')
 			add_history(input);
+		tokens = lexer(input);
+		print_tokens(tokens);
 	}
 	rl_clear_history();
 	return (0);
