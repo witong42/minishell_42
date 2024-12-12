@@ -82,6 +82,15 @@ tokens -parser-> AST
 AST -evaluator-> evaluated AST
 evaluated AST -executor-> output
 
+One pipe is one command table
+On each command table we have following
+Command
+Arguments
+Redirections
+Index
+heredoc filename
+**char for comamnd arguments
+
 https://m4nnb3ll.medium.com/minishell-building-a-mini-bash-a-42-project-b55a10598218
 https://en.wikipedia.org/wiki/Context-free_grammar
 
