@@ -6,7 +6,7 @@
 /*   By: witong <witong@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/11 10:46:56 by witong            #+#    #+#             */
-/*   Updated: 2024/12/11 16:28:48 by witong           ###   ########.fr       */
+/*   Updated: 2024/12/12 10:27:48 by witong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,10 @@ t_token *lexer(char *line)
 			handle_double_ops(line, &i, &tokens);
 		else if (is_redirection(line[i]))
 			handle_redirection(line, &i, &tokens);
-		// else if (line[i] == '\'' || line[i] == '\"')
-		// 	handle_quotes(line, &i, &tokens);
-		// else if (line[i] == '$')
-		// 	handle_dollar(line, &i, &tokens);
+		else if (line[i] == '\'' || line[i] == '\"')
+			handle_quotes(line, &i, &tokens);
+		else if (line[i] == '$')
+			handle_dollar(line, &i, &tokens);
 		else
 			handle_word(line, &i, &tokens);
 	}
