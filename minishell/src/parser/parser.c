@@ -1,18 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parsing.c                                          :+:      :+:    :+:   */
+/*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: witong <witong@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 15:34:31 by witong            #+#    #+#             */
-/*   Updated: 2024/12/12 17:44:26 by witong           ###   ########.fr       */
+/*   Updated: 2024/12/12 17:49:59 by witong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-int	parsing(t_token *tokens)
+
+void	parse_command(t_token *current, t_commands *cmd)
+{
+	int i = 0;
+	while (current && !is_redirection(current->type))
+	{
+		if(current->type == WORD || current->type == SINGLEQ)
+		{
+			cmd->full_cmd[i] = ft_strdup(current->value);
+			i++;
+		}
+		current = current->next;
+	}
+	cmd->full_cmd[i] = NULL;
+}
+
+int	parser(t_token *tokens)
 {
 	t_token	*current;
 	int	pipe;
@@ -29,23 +45,9 @@ int	parsing(t_token *tokens)
 	{
 		if (current->type == PIPE)
 			cmd[pipe++];
+		parse_command(tokens, cmd);
 		current = current->next;
 	}
-	while (pipe > 0)
-	{
-		t_commands cmd;
-	}
-	i = 0;
-	while (current && !is_redirection(current->type))
-	{
-		if(current->type == WORD || current->type == SINGLEQ)
-		{
-			t_commands->full_cmd[i] = ft_strdup(current->value);
-			i++;
-		}
-		current = current->next;
-	}
-	t_commands->full_cmd[i] = NULL;
 	if (current->type == REDIRIN)
 	if (current->type == REDIROUT)
 	if (current->type == HEREDOC)
