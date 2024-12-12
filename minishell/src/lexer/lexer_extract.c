@@ -6,7 +6,7 @@
 /*   By: witong <witong@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/11 15:15:54 by witong            #+#    #+#             */
-/*   Updated: 2024/12/12 10:49:43 by witong           ###   ########.fr       */
+/*   Updated: 2024/12/12 14:03:12 by witong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,47 +21,55 @@ char	*extract_word(const char *line, int *i)
 		(*i)++;
 	return (ft_substr(line, start, *i - start));
 }
-char *extract_single_quote(const char *line, int *i)
+char	*extract_single_quote(const char *line, int *i, t_token **tokens)
 {
 	int		start;
 
 	(*i)++;
 	start = *i;
+	if (line[(*i)++] == '\'')
+		return (NULL);
 	while (line[*i] && line[*i] != '\'')
 		(*i)++;
 	if (line[*i] != '\'')
 	{
-		ft_putstr_fd("lexer: unclosed quotes", 2);
+		ft_putstr_fd("lexer: unclosed quotes\n", 2);
+		free_token(tokens);
 		return (NULL);
 	}
 	(*i)++;
 	return (ft_substr(line, start, *i - start -1));
 }
 
-char *extract_double_quote(const char *line, int *i)
+char	*extract_double_quote(const char *line, int *i, t_token **tokens)
 {
 	int		start;
 
 	(*i)++;
 	start = *i;
+	if (line[(*i)++] == '"')
+		return (NULL);
 	while (line[*i] && line[*i] != '"')
 		(*i)++;
 	if (line[*i] != '"')
 	{
-		ft_putstr_fd("lexer: unclosed quotes", 2);
+		ft_putstr_fd("lexer: unclosed quotes\n", 2);
+		free_token(tokens);
 		return (NULL);
 	}
 	(*i)++;
-	return (ft_substr(line, start, *i - start -1));
+	return (ft_substr(line, start, *i - start - 1));
 }
 
-char *extract_dollar(const char *line, int *i)
+char	*extract_dollar(const char *line, int *i)
 {
 	int		start;
 
 	(*i)++;
 	start = *i;
-	while (line[*i] && (ft_isalnum(line[*i]) || line[*i] == '_'))
+	if (!line[*i] || ft_isspace(line[*i]))
+		return(NULL);
+	while (line[*i] && !ft_isspace(line[*i]))
 		(*i)++;
 	return (ft_substr(line, start, *i - start));
 }
