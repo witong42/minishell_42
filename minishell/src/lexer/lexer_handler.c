@@ -6,7 +6,7 @@
 /*   By: witong <witong@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/11 15:52:21 by witong            #+#    #+#             */
-/*   Updated: 2024/12/13 11:26:29 by witong           ###   ########.fr       */
+/*   Updated: 2024/12/13 20:09:14 by witong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ void handle_dollar(const char *line, int *i, t_token **tokens)
 	value = extract_dollar(line, i);
 	if (!value)
 		return ;
-	if (ft_strcmp(value, "$") == 0)
+	if (ft_strncmp(value, "$", 1) == 0)
 		type = WORD;
 	else
 		type = DOLLAR;

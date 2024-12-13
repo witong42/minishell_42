@@ -6,14 +6,14 @@
 /*   By: witong <witong@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/13 16:20:28 by witong            #+#    #+#             */
-/*   Updated: 2024/12/13 16:28:13 by witong           ###   ########.fr       */
+/*   Updated: 2024/12/13 20:08:22 by witong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-# include "../libft/libft.h"
+# include "../libft/inc/libft.h"
 # include <unistd.h>
 # include <readline/readline.h>
 # include <readline/history.h>
