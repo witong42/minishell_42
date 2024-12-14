@@ -6,11 +6,11 @@
 /*   By: witong <witong@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/13 12:25:07 by witong            #+#    #+#             */
-/*   Updated: 2024/12/14 12:22:58 by witong           ###   ########.fr       */
+/*   Updated: 2024/12/14 15:02:20 by witong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/minishell.h"
+#include "../../includes/minishell.h"
 
 // void parse_redirin(t_token **tokens, t_cmd **cmd)
 // {
