@@ -6,7 +6,7 @@
 /*   By: witong <witong@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/13 16:15:57 by witong            #+#    #+#             */
-/*   Updated: 2024/12/13 16:33:15 by witong           ###   ########.fr       */
+/*   Updated: 2024/12/14 12:18:50 by witong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,10 +56,13 @@ char	*extract_single_quote(const char *line, int *i, t_token **tokens);
 char	*extract_double_quote(const char *line, int *i, t_token **tokens);
 char	*extract_dollar(const char *line, int *i);
 t_tok_type	check_redirection(char c);
-t_tok_type	check_double_ops(const char *line, int i);
+t_tok_type check_double_ops(char c1, char c2);
 int		ft_isspace(char c);
 int		is_redirection(char c);
 int		is_special_char(char c);
 int		is_onlyspaces(char *str);
+int is_illegal(char c1, char c2);
+void illegal_token(char c);
+
 
 #endif

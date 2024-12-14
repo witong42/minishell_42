@@ -6,16 +6,17 @@
 /*   By: witong <witong@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/13 12:25:07 by witong            #+#    #+#             */
-/*   Updated: 2024/12/14 11:32:00 by witong           ###   ########.fr       */
+/*   Updated: 2024/12/14 12:22:58 by witong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-void parse_redirin(t_token **tokens, t_cmd **cmd)
-{
-
-}
+// void parse_redirin(t_token **tokens, t_cmd **cmd)
+// {
+// 	if ()
+// 	(*cmd)->redirs->type =
+// }
 
 // void parse_redirout(t_token **tokens, t_cmd **cmd)
 // {
@@ -32,15 +33,15 @@ void parse_redirin(t_token **tokens, t_cmd **cmd)
 
 // }
 
-void	parse_redirs(t_token **tokens, t_cmd **cmd)
-{
-	if ((*tokens)->type == REDIRIN)
-		parse_redirin(tokens, cmd);
+// void	parse_redirs(t_token **tokens, t_cmd **cmd)
+// {
+// 	if ((*tokens)->type == REDIRIN)
+// 		parse_redirin(tokens, cmd);
 // 	else if ((*tokens)->type == REDIROUT)
 // 		parse_redirout(tokens, cmd);
 // 	else if ((*tokens)->type == APPEND)
 // 		parse_append(tokens, cmd);
 // 	else if ((*tokens)->type == HEREDOC)
 // 		parse_heredoc(tokens, cmd);
-	*tokens = (*tokens)->next;
-}
+// 	*tokens = (*tokens)->next;
+// }

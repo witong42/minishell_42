@@ -6,7 +6,7 @@
 /*   By: witong <witong@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/11 16:02:33 by witong            #+#    #+#             */
-/*   Updated: 2024/12/11 16:21:46 by witong           ###   ########.fr       */
+/*   Updated: 2024/12/14 12:52:58 by witong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,17 @@ t_tok_type	check_redirection(char c)
 	return (UNKNOWN);
 }
 
-t_tok_type	check_double_ops(const char *line, int i)
+t_tok_type check_double_ops(char c1, char c2)
 {
-	if (line[i] == '<' && line[i + 1] == '<')
+	if (c1 == '<' && c2 == '<')
 		return (HEREDOC);
-	if (line[i] == '>' && line[i + 1] == '>')
+	if (c1 == '>' && c2 == '>')
 		return (APPEND);
 	return (UNKNOWN);
+}
+void illegal_token(char c)
+{
+	ft_putstr_fd("lexer: unsupported token error near '", 2);
+	ft_putchar_fd(c, 2);
+	ft_putstr_fd("'\n", 2);
 }

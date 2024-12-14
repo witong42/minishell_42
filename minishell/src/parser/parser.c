@@ -6,7 +6,7 @@
 /*   By: witong <witong@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 15:34:31 by witong            #+#    #+#             */
-/*   Updated: 2024/12/14 11:32:48 by witong           ###   ########.fr       */
+/*   Updated: 2024/12/14 12:23:08 by witong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,8 +68,8 @@ void parse_tokens(t_token **tokens, t_cmd **cmd)
 			break;
 		else if ((*tokens)->type == PIPE)
 			parse_pipe(tokens, cmd);
-		else if (is_redirection2((*tokens)->type))
-			parse_redirs(tokens, cmd);
+		// else if (is_redirection2((*tokens)->type))
+		// 	parse_redirs(tokens, cmd);
 		else if (is_word((*tokens)->type))
 			parse_command(tokens, cmd);
 		else

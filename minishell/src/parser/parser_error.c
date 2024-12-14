@@ -8,5 +8,7 @@ bool	parser_error(t_token **tokens)
 		return (unexpected_token(tokens), true);
 	else if (is_redirection2((*tokens)->type) && (!(*tokens)->next || !is_word((*tokens)->next->type)))
 		return (unexpected_token(tokens), true);
+	else if (!(*tokens)->prev && (*tokens)->type == PIPE)
+		return (unexpected_token(tokens), true);
 	return (false);
 }

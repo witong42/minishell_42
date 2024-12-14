@@ -6,7 +6,7 @@
 /*   By: witong <witong@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/11 10:46:56 by witong            #+#    #+#             */
-/*   Updated: 2024/12/12 17:52:36 by witong           ###   ########.fr       */
+/*   Updated: 2024/12/14 12:27:06 by witong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,12 @@ t_token *lexer(char *line)
 	{
 		if (ft_isspace(line[i]))
 			i++;
-		else if (check_double_ops(line, i) != UNKNOWN)
+		else if (line[i + 1] && is_illegal(line[i], line[i + 1]))
+		{
+			illegal_token(line[i]);
+			break;
+		}
+		else if (line[i + 1] && check_double_ops(line[i], line[i+1]) != UNKNOWN)
 			handle_double_ops(line, &i, &tokens);
 		else if (is_redirection(line[i]))
 			handle_redirection(line, &i, &tokens);
