@@ -6,39 +6,11 @@
 /*   By: witong <witong@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 15:34:31 by witong            #+#    #+#             */
-/*   Updated: 2024/12/14 15:02:28 by witong           ###   ########.fr       */
+/*   Updated: 2024/12/16 16:38:10 by witong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-
-t_cmd	*init_cmd(t_token *tokens)
-{
-	t_cmd *cmd;
-	int	i;
-	int	size;
-
-	if (!tokens)
-		return (NULL);
-	cmd = (t_cmd *)malloc(sizeof(t_cmd));
-	if (!cmd)
-		return (NULL);
-	size = token_len(tokens);
-	cmd->full_cmd = (char **)malloc(sizeof(char *) * size);
-	if (!cmd->full_cmd)
-	{
-		free(cmd);
-		return (NULL);
-	}
-	i = 0;
-	while (i < size)
-		cmd->full_cmd[i++] = NULL;
-	cmd->redirs = NULL;
-	cmd->prev = NULL;
-	cmd->next = NULL;
-	return (cmd);
-
-}
 
 void	parse_command(t_token **tokens, t_cmd **cmd)
 {
@@ -52,36 +24,52 @@ void	parse_command(t_token **tokens, t_cmd **cmd)
 	(*cmd)->full_cmd[i] = NULL;
 }
 
+void	parse_redirs(t_token **tokens, t_cmd **cmd)
+{
+	t_redir *new_redir;
+
+	while (*tokens && is_redirection2((*tokens)->type))
+	{
+		new_redir = create_redir(*tokens);
+		if (!new_redir)
+			return;
+		redir_add_back(&(*cmd)->redirs, new_redir);
+		*tokens = (*tokens)->next;
+	}
+}
+
 void	parse_pipe(t_token **tokens, t_cmd **cmd)
 {
+	*tokens = (*tokens)->next;
 	(*cmd)->next = init_cmd(*tokens);
 	if (!(*cmd)->next)
 		return;
 	*cmd = (*cmd)->next;
 }
 
-void parse_tokens(t_token **tokens, t_cmd **cmd)
+void	parse_tokens(t_token **tokens, t_cmd **cmd)
 {
 	while (*tokens && (*tokens)->type != END)
 	{
-		if (parser_error(tokens))
-			break;
-		else if ((*tokens)->type == PIPE)
+		// if (parser_error(tokens))
+		// 	break;
+		if ((*tokens)->type == PIPE)
 			parse_pipe(tokens, cmd);
-		// else if (is_redirection2((*tokens)->type))
-		// 	parse_redirs(tokens, cmd);
+		else if (is_redirection2((*tokens)->type) && (*cmd)->redirs)
+			parse_redirs(tokens, cmd);
 		else if (is_word((*tokens)->type))
 			parse_command(tokens, cmd);
-		else
-		{
-			unexpected_token(tokens);
-			break;
-		}
-		*tokens = (*tokens)->next;
+		// else
+		// {
+		// 	unexpected_token(tokens);
+		// 	break;
+		// }
+		if (*tokens)
+			*tokens = (*tokens)->next;
 	}
 }
 
-t_cmd *parser(t_token *tokens)
+t_cmd	*parser(t_token *tokens)
 {
 	t_cmd *cmd;
 	t_cmd *head;

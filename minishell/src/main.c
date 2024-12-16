@@ -6,7 +6,7 @@
 /*   By: witong <witong@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 11:04:51 by witong            #+#    #+#             */
-/*   Updated: 2024/12/13 16:05:07 by witong           ###   ########.fr       */
+/*   Updated: 2024/12/16 16:36:37 by witong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,8 +85,8 @@ int	main(int ac, char **av, char **envp)
 	(void) av;
 	(void) envp;
 	char *input;
-	t_token	*tokens;
-	t_cmd	*cmds;
+	t_token	*token;
+	t_cmd	*cmd;
 
 	while (1)
 	{
@@ -95,10 +95,11 @@ int	main(int ac, char **av, char **envp)
 			break ;
 		if (*input != '\0')
 			add_history(input);
-		tokens = lexer(input);
-		cmds = parser(tokens);
-		print_tokens(tokens);
-		print_table(cmds);
+		token = lexer(input);
+		cmd = parser(token);
+		print_tokens(token);
+		print_table(cmd);
+		print_redirs(cmd->redirs);
 	}
 	rl_clear_history();
 	return (0);

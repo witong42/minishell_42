@@ -6,7 +6,7 @@
 /*   By: witong <witong@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/13 16:17:19 by witong            #+#    #+#             */
-/*   Updated: 2024/12/14 11:43:09 by witong           ###   ########.fr       */
+/*   Updated: 2024/12/16 16:37:55 by witong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,18 +14,34 @@
 # define PARSER_H
 
 typedef struct s_cmd t_cmd;
+typedef struct s_redir t_redir;
 
 #include "minishell.h"
 
-// parser and utils
-int	is_word(t_tok_type type);
-int	is_redirection2(t_tok_type type);
-int	token_len(t_token *tokens);
-void	print_table(t_cmd *cmds);
-void unexpected_token(t_token **tokens);
-bool	parser_error(t_token **tokens);
+/* parser */
+void	parse_command(t_token **tokens, t_cmd **cmd);
+void	parse_pipe(t_token **tokens, t_cmd **cmd);
+void	parse_tokens(t_token **tokens, t_cmd **cmd);
 t_cmd	*parser(t_token *tokens);
-void	parse_redirs(t_token **tokens, t_cmd **cmd);
 
+/* parser_init */
+char **malloc_full_cmd(int size);
+t_redir *malloc_redirs(int size);
+t_cmd	*init_cmd(t_token *tokens);
+
+/* parser_utils */
+int		is_word(t_tok_type type);
+int		is_redirection2(t_tok_type type);
+int		token_len(t_token *tokens);
+void 	unexpected_token(t_token **tokens);
+
+/* parser_utils2 */
+t_redir	*create_redir(t_token *token);
+void	redir_add_back(t_redir **redirs, t_redir *new_redir);
+void	print_table(t_cmd *cmds);
+void	print_redirs(t_redir *redirs);
+
+/* parser_error */
+bool	parser_error(t_token **tokens);
 
 #endif
