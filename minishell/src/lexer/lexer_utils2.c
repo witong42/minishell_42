@@ -6,7 +6,7 @@
 /*   By: witong <witong@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/11 10:25:24 by witong            #+#    #+#             */
-/*   Updated: 2024/12/14 15:01:59 by witong           ###   ########.fr       */
+/*   Updated: 2024/12/17 12:30:17 by witong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int	is_special_char(char c)
 	return (c == '|' || c == '<' || c == '>'
 		|| c == '$' || c == '\'' || c == '\"');
 }
-int is_illegal(char c1, char c2)
+int	is_illegal(char c1, char c2)
 {
 	if (c1 == '\\' || c1 == ';' || c1 == '(' || c1 == ')')
 		return (1);

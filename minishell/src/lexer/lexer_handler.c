@@ -6,7 +6,7 @@
 /*   By: witong <witong@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/11 15:52:21 by witong            #+#    #+#             */
-/*   Updated: 2024/12/14 15:02:04 by witong           ###   ########.fr       */
+/*   Updated: 2024/12/17 12:33:20 by witong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void handle_double_ops(const char *line, int *i, t_token **tokens)
 
 	type = UNKNOWN;
 	if (line[(*i) + 1])
-		type = check_double_ops(line[*i], line[(*i) + 1]);
+		type = check_double_ops(line, *i);
 	if (type != UNKNOWN)
 	{
 		value = ft_substr(line, *i, 2);

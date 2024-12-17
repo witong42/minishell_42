@@ -6,7 +6,7 @@
 /*   By: witong <witong@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/11 15:15:54 by witong            #+#    #+#             */
-/*   Updated: 2024/12/14 15:02:10 by witong           ###   ########.fr       */
+/*   Updated: 2024/12/17 12:31:48 by witong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ char	*extract_single_quote(const char *line, int *i, t_token **tokens)
 	if (line[*i] != '\'')
 	{
 		ft_putstr_fd("lexer: unclosed quotes\n", 2);
-		free_token(tokens);
+		free_token(*tokens);
 		return (NULL);
 	}
 	(*i)++;
@@ -54,7 +54,7 @@ char	*extract_double_quote(const char *line, int *i, t_token **tokens)
 	if (line[*i] != '"')
 	{
 		ft_putstr_fd("lexer: unclosed quotes\n", 2);
-		free_token(tokens);
+		free_token(*tokens);
 		return (NULL);
 	}
 	(*i)++;

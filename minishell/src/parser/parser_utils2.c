@@ -6,7 +6,7 @@
 /*   By: witong <witong@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/13 12:25:07 by witong            #+#    #+#             */
-/*   Updated: 2024/12/16 16:37:08 by witong           ###   ########.fr       */
+/*   Updated: 2024/12/17 12:10:26 by witong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,12 +27,13 @@ t_redir *create_redir(t_token *token)
 		return (NULL);
 	}
 	new_redir->next = NULL;
+	new_redir->prev = NULL;
 	return (new_redir);
 }
 
-void redir_add_back(t_redir **redirs, t_redir *new_redir)
+void	redir_add_back(t_redir **redirs, t_redir *new_redir)
 {
-	t_redir *redir;
+	t_redir	*tmp;
 
 	if (!redirs || !new_redir)
 		return ;
@@ -41,10 +42,33 @@ void redir_add_back(t_redir **redirs, t_redir *new_redir)
 		*redirs = new_redir;
 		return ;
 	}
-	redir = *redirs;
-	while (redir->next)
-		redir = redir->next;
-	redir->next = new_redir;
+	tmp = *redirs;
+	while (tmp->next)
+		tmp = tmp->next;
+	tmp->next = new_redir;
+	new_redir->prev = tmp;
+}
+
+void	print_redirs(t_cmd *cmd)
+{
+	int	j;
+	t_cmd	*current;
+	t_redir	*redir;
+
+	j = 0;
+	current = cmd;
+	while (current)
+	{
+		printf("Command[%d] Redirections:\n", j);
+		redir = current->redirs;
+		while (redir)
+		{
+			printf("  Redir Type: %d, File: %s\n", redir->type, redir->file);
+			redir = redir->next;
+		}
+		current = current->next;
+		j++;
+	}
 }
 
 void	print_table(t_cmd *cmd)
@@ -67,16 +91,5 @@ void	print_table(t_cmd *cmd)
 		printf("  Arg[%d]: %s\n", i, current->full_cmd[i]);
 		current = current->next;
 		j++;
-	}
-}
-
-void print_redirs(t_redir *redirs)
-{
-	t_redir *current = redirs;
-
-	while (current)
-	{
-		printf("Redirection type: %d, file: %s\n", current->type, current->file);
-		current = current->next;
 	}
 }

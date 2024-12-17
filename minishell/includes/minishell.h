@@ -6,7 +6,7 @@
 /*   By: witong <witong@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/13 16:20:28 by witong            #+#    #+#             */
-/*   Updated: 2024/12/13 20:08:22 by witong           ###   ########.fr       */
+/*   Updated: 2024/12/17 12:08:10 by witong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ typedef struct s_redir
 	t_tok_type	type;
 	char	*file;
 	struct s_redir *next;
+	struct s_redir *prev;
 }	t_redir;
 
 // Command chained list
