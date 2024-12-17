@@ -6,7 +6,7 @@
 /*   By: witong <witong@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 15:34:31 by witong            #+#    #+#             */
-/*   Updated: 2024/12/17 12:17:11 by witong           ###   ########.fr       */
+/*   Updated: 2024/12/17 12:13:07 by witong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,6 @@ void	parse_redirs(t_token **tokens, t_cmd **cmd)
 
 void	parse_pipe(t_token **tokens, t_cmd **cmd)
 {
-	*tokens = (*tokens)->next;
 	(*cmd)->next = init_cmd(*tokens);
 	if (!(*cmd)->next)
 		return;
@@ -50,9 +49,10 @@ void	parse_tokens(t_token **tokens, t_cmd **cmd)
 	{
 		if (parser_error(tokens))
 			break;
-		if ((*tokens)->type == PIPE)
+		else if ((*tokens)->type == PIPE)
 			parse_pipe(tokens, cmd);
-		else if (is_redirection2((*tokens)->type) && (*cmd)->redirs)
+		else if (is_redirection2((*tokens)->type) && (*tokens)->next
+				&& is_word((*tokens)->next->type))
 			parse_redirs(tokens, cmd);
 		else if (is_word((*tokens)->type))
 			parse_command(tokens, cmd);
@@ -66,7 +66,7 @@ void	parse_tokens(t_token **tokens, t_cmd **cmd)
 	}
 }
 
-t_cmd	*parser(t_token *tokens)
+t_cmd *parser(t_token *tokens)
 {
 	t_cmd *cmd;
 	t_cmd *head;
