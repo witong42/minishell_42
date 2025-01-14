@@ -6,70 +6,73 @@
 /*   By: witong <witong@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/11 15:15:54 by witong            #+#    #+#             */
-/*   Updated: 2024/12/17 12:31:48 by witong           ###   ########.fr       */
+/*   Updated: 2025/01/14 15:28:42 by witong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-char	*extract_word(const char *line, int *i)
+char	*extract_word(char *line, t_shell *shell, t_lexer *state)
 {
-	int		start;
+	int	start;
+	char *ret;
+	char *tmp;
 
-	start = *i;
-	while (line[*i] && !ft_isspace(line[*i]) && !is_special_char(line[(*i)]))
-		(*i)++;
-	return (ft_substr(line, start, *i - start));
-}
-char	*extract_single_quote(const char *line, int *i, t_token **tokens)
-{
-	int		start;
-
-	(*i)++;
-	start = *i;
-	if (line[(*i)++] == '\'')
-		return (NULL);
-	while (line[*i] && line[*i] != '\'')
-		(*i)++;
-	if (line[*i] != '\'')
+	start = state->j;
+	ret = ft_strdup_track(shell, "");
+	while (line[state->j] && !ft_isspace(line[state->j]) && !is_redirection(line[(state->j)]))
 	{
-		ft_putstr_fd("lexer: unclosed quotes\n", 2);
-		free_token(*tokens);
+		if (line[state->j] == '\'' || line[state->j] == '"')
+		{
+			tmp = extract_quote(line, shell, state);
+			if (!tmp)
+				return (NULL);
+			ret = ft_strjoin_track(shell, ret, tmp);
+		}
+		state->j++;
+	}
+	ret = ft_substr_track(shell, line, start, state->j - start);
+	return (ret);
+}
+
+char	*extract_quote(char *line, t_shell *shell, t_lexer *state)
+{
+	int		start;
+	char	quote;
+
+	quote = line[state->j];
+	state->j++;
+	start = state->j;
+	if ((line[state->j] == '\'' || line[state->j] == '\"') && !state->tokens)
+	{
+		ft_putstr_fd("lexer: command not found\n", 2);
+		state->j++;
 		return (NULL);
 	}
-	(*i)++;
-	return (ft_substr(line, start, *i - start -1));
-}
-
-char	*extract_double_quote(const char *line, int *i, t_token **tokens)
-{
-	int		start;
-
-	(*i)++;
-	start = *i;
-	if (line[(*i)++] == '"')
-		return (NULL);
-	while (line[*i] && line[*i] != '"')
-		(*i)++;
-	if (line[*i] != '"')
+	while (line[state->j] && line[state->j] != quote)
+		state->j++;
+	if (!line[state->j] || line[state->j] != quote)
 	{
-		ft_putstr_fd("lexer: unclosed quotes\n", 2);
-		free_token(*tokens);
+		if (start == 1)
+			ft_putstr_fd("lexer: command not found\n", 2);
+		else
+			ft_putstr_fd("lexer: unclosed quotes\n", 2);
 		return (NULL);
 	}
-	(*i)++;
-	return (ft_substr(line, start, *i - start - 1));
+	state->j++;
+	return (ft_substr_track(shell, line, start, state->j - start - 1));
 }
 
-char	*extract_dollar(const char *line, int *i)
+char	*extract_dollar(char *line, t_shell *shell, t_lexer *state)
 {
 	int		start;
 
-	(*i)++;
-	start = *i;
-	if (!line[*i] || ft_isspace(line[*i]))
-		return(ft_strdup("$"));
-	while (line[*i] && !ft_isspace(line[*i]))
-		(*i)++;
-	return (ft_substr(line, start, *i - start));
+	state->j++;
+	start = state->j;
+	if (!line[state->j] || ft_isspace(line[state->j]))
+		return (ft_strdup_track(shell, "$"));
+	while (line[state->j] && (ft_isalnum(line[state->j])
+			|| line[state->j] == '_' || line[state->j] == '?'))
+		state->j++;
+	return (ft_substr_track(shell, line, start, state->j - start));
 }

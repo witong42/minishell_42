@@ -1,15 +1,3 @@
-# **************************************************************************** #
-#                                                                              #
-#                                                         :::      ::::::::    #
-#    Makefile                                           :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: witong <witong@student.42.fr>              +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2024/12/06 18:05:29 by arotondo          #+#    #+#              #
-#    Updated: 2024/12/16 16:00:56 by witong           ###   ########.fr        #
-#                                                                              #
-# **************************************************************************** #
-
 NAME = minishell
 
 SRC_DIR = src
@@ -17,10 +5,14 @@ OBJ_DIR = obj
 INC_DIR = includes
 LIBFT_DIR = libft
 
-SRC = main.c lexer/lexer.c lexer/lexer_utils.c \
-		lexer/lexer_utils2.c lexer/lexer_utils3.c \
+SRC =	main.c utils/init.c \
+		lexer/lexer.c lexer/lexer_input.c lexer/lexer_illegal.c \
+		lexer/lexer_token.c lexer/lexer_utils.c\
 		lexer/lexer_extract.c lexer/lexer_handler.c \
-		parser/parser.c parser/parser_init.c parser/parser_utils2.c parser/parser_utils.c parser/parser_error.c
+		parser/parser.c parser/parser_init.c parser/parser_redirs.c \
+		parser/parser_utils.c parser/parser_error.c \
+		expander/expand.c\
+		utils/clean_up.c utils/global_utils.c utils/gc.c
 OBJ = $(SRC:%.c=$(OBJ_DIR)/%.o)
 
 # SFLAGS = -fsanitize=address -g
@@ -47,12 +39,12 @@ $(OBJ_DIR):
 clean:
 	@make -C $(LIBFT_DIR) clean
 	@rm -rf $(OBJ_DIR) $(BONUS_OBJ_DIR)
-	@echo "${GREEN}Files clean up done.{DEF_COLOR}"
+	@echo "${GREEN}Files clean up done.${DEF_COLOR}"
 
 fclean: clean
 	@make -C $(LIBFT_DIR) fclean
 	@rm -rf $(NAME) $(NAME_BONUS)
-	@echo "${GREEN}Clean up done.{DEF_COLOR}"
+	@echo "${GREEN}Clean up done.${DEF_COLOR}"
 
 re: fclean all
 

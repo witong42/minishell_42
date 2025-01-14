@@ -6,21 +6,23 @@
 /*   By: witong <witong@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/13 12:25:07 by witong            #+#    #+#             */
-/*   Updated: 2024/12/17 12:19:45 by witong           ###   ########.fr       */
+/*   Updated: 2025/01/07 16:30:21 by witong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-t_redir	*create_redir(t_token *tokens)
+t_redir	*create_redir(t_shell *shell, t_token *tokens)
 {
 	t_redir	*new_redir;
 
-	new_redir = malloc(sizeof(t_redir));
+	if (!tokens || !tokens->next || !tokens->next->value)
+		return (NULL);
+	new_redir = tracked_malloc(shell, sizeof(t_redir));
 	if (!new_redir)
 		return (NULL);
 	new_redir->type = tokens->type;
-	new_redir->file = ft_strdup(tokens->next->value);
+	new_redir->file = ft_strdup_track(shell, tokens->next->value);
 	if (!new_redir->file)
 	{
 		free(new_redir);
@@ -51,20 +53,23 @@ void	redir_add_back(t_redir **redirs, t_redir *new_redir)
 
 void	print_redirs(t_cmd *cmd)
 {
-	int	j;
 	t_cmd	*current;
 	t_redir	*redir;
+	int		j;
 
 	j = 0;
 	current = cmd;
 	while (current)
 	{
-		printf("Command[%d] Redirections:\n", j);
-		redir = current->redirs;
-		while (redir)
+		if (current->redirs)
 		{
-			printf("  Redir Type: %d, File: %s\n", redir->type, redir->file);
-			redir = redir->next;
+			printf("Command[%d] Redirections:\n", j);
+			redir = current->redirs;
+			while (redir)
+			{
+				printf("  Redir Type: %d, File: %s\n", redir->type, redir->file);
+				redir = redir->next;
+			}
 		}
 		current = current->next;
 		j++;
@@ -73,9 +78,9 @@ void	print_redirs(t_cmd *cmd)
 
 void	print_table(t_cmd *cmd)
 {
-	int	i;
-	int	j;
 	t_cmd	*current;
+	int		i;
+	int		j;
 
 	j = 0;
 	current = cmd;
@@ -88,7 +93,6 @@ void	print_table(t_cmd *cmd)
 			printf("  Arg[%d]: %s\n", i, current->full_cmd[i]);
 			i++;
 		}
-		printf("  Arg[%d]: %s\n", i, current->full_cmd[i]);
 		current = current->next;
 		j++;
 	}

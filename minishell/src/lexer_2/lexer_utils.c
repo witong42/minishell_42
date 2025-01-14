@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lexer_utils2.c                                     :+:      :+:    :+:   */
+/*   lexer_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: witong <witong@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/11 10:25:24 by witong            #+#    #+#             */
-/*   Updated: 2024/12/17 12:30:17 by witong           ###   ########.fr       */
+/*   Created: 2025/01/11 14:19:22 by witong            #+#    #+#             */
+/*   Updated: 2025/01/13 12:16:09 by witong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,21 +17,27 @@ int	ft_isspace(char c)
 	return (c == 32 || (c >= 9 && c <= 13));
 }
 
-int	is_redirection(char c)
+int	is_empty_quotes(char *str)
 {
-	return (c == '|' || c == '<' || c == '>');
+	return (!str || !str[0] || !ft_strcmp(str, "\"\"") || !ft_strcmp(str, "\'\'"));
 }
 
 int	is_special_char(char c)
 {
-	return (c == '|' || c == '<' || c == '>'
-		|| c == '$' || c == '\'' || c == '\"');
+	return (c == '<' || c == '>' || c == '|' || c == '$' || c == '\'' || c == '\"');
 }
-int	is_illegal(char c1, char c2)
+
+int	check_double_redir(char *input, int i)
 {
-	if (c1 == '\\' || c1 == ';' || c1 == '(' || c1 == ')')
-		return (1);
-	if ((c1 == '&' && c2 == '&') || (c1 == '|' && c2 == '|'))
-		return (1);
-	return (0);
+	return ((input[i] == '<' && input[i + 1] == '<') ||
+		(input[i] == '>' && input[i + 1] == '>'));
+}
+
+void	init_state(t_lexer *state)
+{
+	state->i = 0;
+	state->error = 0;
+	state->quote = '\0';
+	state->is_heredoc = 0;
+	state->tokens = NULL;
 }
