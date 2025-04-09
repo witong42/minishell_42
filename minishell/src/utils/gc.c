@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   gc.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: witong <witong@student.42.fr>              +#+  +:+       +#+        */
+/*   By: arotondo <arotondo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 13:12:07 by witong            #+#    #+#             */
-/*   Updated: 2025/01/09 13:14:14 by witong           ###   ########.fr       */
+/*   Updated: 2025/02/26 13:13:39 by arotondo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,16 +21,12 @@ void	*tracked_malloc(t_shell *shell, size_t size)
 		return (NULL);
 	ptr = malloc(size);
 	if (!ptr)
-	{
-		perror("Memory allocation failed");
-		exit(EXIT_FAILURE);
-	}
+		err_message(shell, "malloc", NULL, NULL);
 	node = (t_clean *)malloc(sizeof(t_clean));
 	if (!node)
 	{
-		perror("Cleanup node creation failed");
 		free(ptr);
-		exit(EXIT_FAILURE);
+		err_message(shell, "malloc", NULL, NULL);
 	}
 	node->ptr = ptr;
 	node->next = shell->clean;
@@ -80,24 +76,24 @@ char	*ft_strdup_track(t_shell *shell, char *src)
 	return (dup);
 }
 
-char	*ft_substr_track(t_shell *shell, char const *s, unsigned int start, size_t len)
+char	*ft_substr_track(t_shell *shell, char *s, unsigned int start, size_t n)
 {
-	size_t i;
-	char *str;
+	char	*str;
+	size_t	i;
 
 	if (s == NULL)
 		return (NULL);
 	if (start >= ft_strlen(s))
 		return (ft_strdup_track(shell, ""));
-	if (len >= ft_strlen(s) - start)
-		len = ft_strlen(s) - start;
-	str = tracked_malloc(shell, sizeof(char) * (len + 1));
+	if (n >= ft_strlen(s) - start)
+		n = ft_strlen(s) - start;
+	str = tracked_malloc(shell, sizeof(char) * (n + 1));
 	if (!str)
 		return (NULL);
 	i = 0;
-	while (i < len)
+	while (i < n)
 		str[i++] = s[start++];
-	str[len] = '\0';
+	str[n] = '\0';
 	return (str);
 }
 
@@ -109,7 +105,8 @@ char	*ft_strjoin_track(t_shell *shell, const char *s1, const char *s2)
 
 	if (!s1 || !s2)
 		return (NULL);
-	str = (char *)tracked_malloc(shell, sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 1));
+	str = (char *)tracked_malloc(shell, sizeof(char) * \
+	(ft_strlen(s1) + ft_strlen(s2) + 1));
 	if (!str)
 		return (NULL);
 	i = 0;

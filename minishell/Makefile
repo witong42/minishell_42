@@ -1,4 +1,5 @@
 NAME = minishell
+CC = cc
 
 SRC_DIR = src
 OBJ_DIR = obj
@@ -9,14 +10,25 @@ SRC =	main.c utils/init.c \
 		lexer/lexer.c lexer/lexer_input.c lexer/lexer_illegal.c \
 		lexer/lexer_token.c lexer/lexer_utils.c\
 		lexer/lexer_extract.c lexer/lexer_handler.c \
+		executor/execution.c executor/path.c \
+		executor/exec_utils.c executor/exec_utils2.c \
+		executor/redirection.c executor/here_doc.c \
+		executor/one_command.c executor/several_commands.c \
+		executor/redirection2.c \
+		builtins/cd.c builtins/cd_utils.c builtins/echo.c builtins/env.c \
+		builtins/exit.c builtins/exit_utils.c builtins/export.c \
+		builtins/export_utils.c \
+		builtins/pwd.c builtins/unset.c builtins/env_utils.c \
 		parser/parser.c parser/parser_init.c parser/parser_redirs.c \
 		parser/parser_utils.c parser/parser_error.c \
-		expander/expand.c\
-		utils/clean_up.c utils/global_utils.c utils/gc.c
+		expander/expand.c expander/expand_utils.c \
+		utils/global_utils.c utils/gc.c utils/signals.c \
+		utils/error.c
+
 OBJ = $(SRC:%.c=$(OBJ_DIR)/%.o)
 
 # SFLAGS = -fsanitize=address -g
-CFLAGS = -Wall -Wextra -Werror -g3 -I $(INC_DIR) -I $(LIBFT_DIR)
+CFLAGS = -Wall -Wextra -Werror -I $(INC_DIR) -I $(LIBFT_DIR)
 LIBS = -L $(LIBFT_DIR) -lft -lreadline
 
 DEF_COLOR = \033[0;39m

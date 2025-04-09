@@ -1,7 +1,19 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: arotondo <arotondo@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/02/28 14:20:59 by arotondo          #+#    #+#             */
+/*   Updated: 2025/02/28 14:22:32 by arotondo         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-# include "../libft/inc/libft.h"
+# include "../libft/libft.h"
 # include <unistd.h>
 # include <readline/readline.h>
 # include <readline/history.h>
@@ -10,6 +22,7 @@
 # include <string.h>
 # include <signal.h>
 # include <stdbool.h>
+# include <errno.h>
 # include <limits.h>
 # include <fcntl.h>
 # include <sys/types.h>
@@ -19,14 +32,14 @@
 # include "lexer.h"
 # include "parser.h"
 # include "expand.h"
-// # include "exec.h"
-// # include "builtins.h"
+# include "exec.h"
+# include "builtins.h"
 # include "utils.h"
 
-typedef struct s_shell t_shell;
-typedef struct s_token t_token;
-typedef enum e_type t_type;
-typedef struct s_clean t_clean;
+typedef struct s_shell			t_shell;
+typedef struct s_token			t_token;
+typedef enum e_type				t_type;
+typedef struct s_clean			t_clean;
 
 /* redirections structure */
 typedef struct s_redir
@@ -41,28 +54,49 @@ typedef struct s_redir
 typedef struct s_cmd
 {
 	char			**full_cmd;
-	int				infile; // OU CHAR * // A DETERMINER
-	int				outfile; // OU CHAR * // A DETERMINER
 	bool			is_quote;
-	char			*limiter;
-	int				*pipe;
-	pid_t			*pids;
+	bool			flag_hd;
+	int				i_hd;
+	int				hd_count;
+	int				loop_status;
+	int				cmd_len;
+	int				in_count;
+	char			*last_file;
+	char			**limiter;
 	struct s_redir	*redirs;
 	struct s_cmd	*next;
 	struct s_cmd	*prev;
 }			t_cmd;
 
+typedef struct s_exec
+{
+	int		infile;
+	int		outfile;
+	int		cmd_count;
+	int		builtin_less;
+	int		pipe[2];
+	int		old_pipe;
+	int		tty_fd0;
+	int		tty_fd1;
+	pid_t	*pids;
+	bool	last_cmd;
+	bool	if_pipe;
+}			t_exec;
+
 /* global data structure */
 typedef struct s_shell
 {
 	int		argc;
-	int		exit_status;
 	char	**argv;
 	char	**envp;
 	char	*input;
+	int		last_status;
 	t_token	*token;
 	t_cmd	*cmd;
+	t_exec	*exec;
 	t_clean	*clean;
 }			t_shell;
+
+extern volatile sig_atomic_t	g_signal;
 
 #endif
