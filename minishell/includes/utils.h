@@ -22,7 +22,7 @@ typedef struct s_clean
 }			t_clean;
 
 /* global utils */
-int		ft_isupper(int c);
+int		ft_isvarchar(int c);
 int		count_line(char **array);
 
 /* env_utils */

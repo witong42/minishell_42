@@ -1,65 +1,123 @@
-# 42-minishell
+# minishell
 
-## 0. Excerpt from subject :
+A simplified Unix shell written in C as part of the 42 school curriculum. Minishell replicates core bash functionality including command execution, pipes, redirections, environment variable expansion, and built-in commands.
 
-Program name minishell
-Turn in files Makefile, *.h, *.c
-Makefile NAME, all, clean, fclean, re
-Arguments
-External functs. readline, rl_clear_history, rl_on_new_line,
-rl_replace_line, rl_redisplay, add_history,
-printf, malloc, free, write, access, open, read,
-close, fork, wait, waitpid, wait3, wait4, signal,
-sigaction, sigemptyset, sigaddset, kill, exit,
-getcwd, chdir, stat, lstat, fstat, unlink, execve,
-dup, dup2, pipe, opendir, readdir, closedir,
-strerror, perror, isatty, ttyname, ttyslot, ioctl,
-getenv, tcsetattr, tcgetattr, tgetent, tgetflag,
-tgetnum, tgetstr, tgoto, tputs
-Libft authorized Yes
-Description Write a shell
+## Building
 
-- Display a prompt when waiting for a new command.
-- Have a working history.
-- Search and launch the right executable (based on the PATH variable or using a relative or an absolute path).
-- Avoid using more than one global variable to indicate a received signal. Consider the implications: this approach ensures that your signal handler will not access your main data structures.
-Not interpret unclosed quotes or special characters which are not required by the subject such as \ (backslash) or ; (semicolon).
-• Handle ’ (single quote) which should prevent the shell from interpreting the metacharacters in the quoted sequence.
-• Handle " (double quote) which should prevent the shell from interpreting the metacharacters in the quoted sequence except for $ (dollar sign).
-• Implement redirections:
-◦ < should redirect input.
-◦ > should redirect output.
-◦ << should be given a delimiter, then read the input until a line containing the
-delimiter is seen. However, it doesn’t have to update the history!
-◦ >> should redirect output in append mode.
-• Implement pipes (| character). The output of each command in the pipeline is
-connected to the input of the next command via a pipe.
-• Handle environment variables ($ followed by a sequence of characters) which
-should expand to their values.
-• Handle $? which should expand to the exit status of the most recently executed
-foreground pipeline.
-• Handle ctrl-C, ctrl-D and ctrl-\ which should behave like in bash.
-• In interactive mode:
-◦ ctrl-C displays a new prompt on a new line.
-◦ ctrl-D exits the shell.
-◦ ctrl-\ does nothing.
-• Your shell must implement the following builtins:
-◦ echo with option -n
-◦ cd with only a relative or absolute path
-◦ pwd with no options
-◦ export with no options
-◦ unset with no options
-◦ env with no options or arguments
-◦ exit with no options
-The readline() function can cause memory leaks. You don’t have to fix them. But
-that doesn’t mean your own code, yes the code you wrote, can have memory
-leaks.
+### Prerequisites
 
-Bonus ? • && and || with parenthesis for priorities.
+- GCC or Clang compiler
+- GNU Make
+- GNU Readline library (`libreadline-dev` on Debian/Ubuntu)
 
-- Overall Structure→Input Lexing  Parsing  Execution
-  1. Lexing (Tokenization): Break the raw input string into a series of tokens (words, operators, redirections, pipes, etc.).
-  2. Parsing: Analyze the tokens to build a command structure (command table) that represents the intended execution.
-  3. Execution: Use the parsed structure to execute commands, handling redirections, pipes, and built-in commands.
+### Compile
 
+```bash
+cd minishell
+make
+```
 
+### Run
+
+```bash
+./minishell
+```
+
+### Clean
+
+```bash
+make clean   # remove object files
+make fclean  # remove object files and executable
+make re      # full rebuild
+```
+
+## Features
+
+### Command Execution
+- Searches executables via the `PATH` environment variable
+- Supports absolute and relative paths
+- Proper exit status tracking (`$?`)
+
+### Pipes
+- `cmd1 | cmd2 | cmd3` - chains commands via pipes
+
+### Redirections
+- `< file` - redirect input from file
+- `> file` - redirect output to file (truncate)
+- `>> file` - redirect output to file (append)
+- `<< DELIM` - here-document (read input until delimiter)
+
+### Quoting
+- Single quotes (`'...'`) - prevent all interpretation
+- Double quotes (`"..."`) - prevent interpretation except for `$` expansion
+
+### Environment Variable Expansion
+- `$VAR` expands to the value of the environment variable
+- `$?` expands to the exit status of the last command
+
+### Signal Handling
+- `Ctrl+C` - displays a new prompt on a new line
+- `Ctrl+D` - exits the shell
+- `Ctrl+\` - ignored in interactive mode
+
+### Built-in Commands
+
+| Command  | Description                          |
+|----------|--------------------------------------|
+| `echo`   | Print arguments (`-n` flag supported)|
+| `cd`     | Change directory (absolute, relative, `~`, `-`) |
+| `pwd`    | Print working directory              |
+| `export` | Set environment variables            |
+| `unset`  | Remove environment variables         |
+| `env`    | Display environment variables        |
+| `exit`   | Exit the shell with optional status  |
+
+## Architecture
+
+```
+Input -> Lexer -> Parser -> Expander -> Executor
+```
+
+### Lexer (`src/lexer/`)
+Tokenizes raw input into a linked list of typed tokens (WORD, PIPE, REDIRIN, REDIROUT, APPEND, HEREDOC, etc.). Handles quote tracking and space normalization around operators.
+
+### Parser (`src/parser/`)
+Builds a command table (linked list of `t_cmd` structs) from the token list. Each command contains its arguments, redirections, and heredoc information.
+
+### Expander (`src/expander/`)
+Resolves `$VAR` references to their environment values and `$?` to the last exit status. Expansion respects quoting rules (no expansion inside single quotes).
+
+### Executor (`src/executor/`)
+Executes commands by forking child processes, setting up pipes and redirections, and resolving executable paths via `PATH`. Built-in commands run in the parent process (single command) or child process (in a pipeline).
+
+### Memory Management (`src/utils/gc.c`)
+A garbage collector tracks all dynamically allocated memory during command processing via a linked list. A single `cleanup_all()` call frees everything between command cycles.
+
+## Project Structure
+
+```
+minishell/
+  Makefile
+  includes/          # Header files
+    minishell.h      # Core structures (t_shell, t_cmd, t_exec, t_redir)
+    lexer.h          # Lexer types and functions
+    parser.h         # Parser functions
+    exec.h           # Execution functions
+    expand.h         # Expander functions
+    builtins.h       # Built-in command functions
+    utils.h          # Utilities, GC, signals, errors
+  src/
+    main.c           # Entry point and main loop
+    lexer/           # Tokenization
+    parser/          # Syntax analysis
+    expander/        # Variable expansion
+    executor/        # Command execution, pipes, redirections
+    builtins/        # Built-in command implementations
+    utils/           # Init, signals, error handling, GC
+  libft/             # 42 standard library (string, memory, list utilities)
+```
+
+## Authors
+
+- arotondo
+- witong

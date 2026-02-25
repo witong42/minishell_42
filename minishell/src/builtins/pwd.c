@@ -16,11 +16,7 @@ int	ft_pwd(int argc)
 {
 	char	*curr_dir;
 
-	if (argc != 1)
-	{
-		ft_putstr_fd("pwd: too many arguments\n", 2);
-		return (1);
-	}
+	(void)argc;
 	curr_dir = getcwd(NULL, 0);
 	if (!curr_dir)
 		return (1);

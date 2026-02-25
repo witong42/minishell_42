@@ -12,7 +12,7 @@
 
 #include "../../includes/minishell.h"
 
-int	ft_isupper(int c)
+int	ft_isvarchar(int c)
 {
 	if (c > 64 && c < 91)
 		return (1);

@@ -41,24 +41,13 @@ bool	check_flag(char **flag, int *idx)
 int	ft_echo(int nb, char **arg, char **envp)
 {
 	int		i;
-	int		j;
 	bool	flag;
 
+	(void)envp;
 	i = 0;
 	flag = check_flag(arg, &i);
 	while (++i < nb)
 	{
-		j = 0;
-		while (arg[i][j] && arg[i][j + 1])
-		{
-			if (arg[i][j] == '$' && ft_isupper(arg[i][++j]))
-			{
-				if (arg[i + 1] && ft_getenv(arg[++i], envp) == NULL)
-					ft_putstr_fd("\n", 1);
-			}
-			else
-				break ;
-		}
 		ft_putstr_fd(arg[i], 1);
 		if (i != nb - 1)
 			ft_putchar_fd(' ', 1);

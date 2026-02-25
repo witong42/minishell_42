@@ -24,8 +24,7 @@ int	redirect_setup(t_shell *shell, t_exec *exec, t_redir *redir)
 		{
 			if (shell->cmd->flag_hd == false)
 			{
-				perror("STEP1");
-				if (dup2(exec->pipe[0], STDIN_FILENO) < 0)
+					if (dup2(exec->pipe[0], STDIN_FILENO) < 0)
 					err_message(shell, "redirection error", NULL, NULL);
 				close(exec->pipe[0]);
 				exec->pipe[0] = 0;

@@ -12,7 +12,6 @@
 
 #include "../../includes/exec.h"
 
-// renvoie 1 si ouvert et 0 si ferme ou invalide
 int	is_fd_open(int fd)
 {
 	return (fcntl(fd, F_GETFD) != -1);
@@ -29,7 +28,6 @@ int	setup_old_pipe(t_shell *shell, t_exec *exec)
 	}
 	if (exec->last_cmd == false && exec->pipe[1] != 0)
 	{
-		perror("STEP2");
 		if (dup2(exec->pipe[1], STDOUT_FILENO) < 0)
 			err_message(shell, "redirection error", NULL, NULL);
 		if (close(exec->pipe[1]) < 0)
@@ -74,7 +72,6 @@ int	wait_process(t_shell *shell, int n)
 	{
 		if (shell->exec->pids[i] > 0)
 		{
-			perror("WAIT");
 			if (waitpid(shell->exec->pids[i], &status, 0) < 0)
 				err_message(shell, "waitpid", NULL, NULL);
 			sig_handler(shell, &status, &print_sigquit);

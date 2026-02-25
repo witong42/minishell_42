@@ -23,7 +23,8 @@ static bool	create_new_env(t_shell *shell, char **new_env, char *word, int wlen)
 	unset = false;
 	while (shell->envp[i])
 	{
-		if (!ft_strncmp(shell->envp[i], word, wlen))
+		if (!ft_strncmp(shell->envp[i], word, wlen)
+			&& (shell->envp[i][wlen] == '=' || shell->envp[i][wlen] == '\0'))
 			unset = true;
 		else
 			new_env[j++] = ft_strdup(shell->envp[i]);

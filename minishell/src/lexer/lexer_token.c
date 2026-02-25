@@ -50,18 +50,3 @@ void	token_add_back(t_token **list, t_token *new_token)
 	tmp->next = new_token;
 	new_token->prev = tmp;
 }
-
-// void	print_tokens(t_token *head)
-// {
-// 	t_token	*current;
-//
-// 	if (!head)
-// 		return ;
-// 	current = head;
-// 	while (current)
-// 	{
-// 		printf("[%d:%s] -> ", current->type, current->value);
-// 		current = current->next;
-// 	}
-// 	printf("END\n");
-// }

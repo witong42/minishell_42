@@ -21,7 +21,7 @@ char	*check_path(t_shell *shell, char **cmd, char *env)
 	if (env != NULL)
 		tab = ft_split(env + 5, ':');
 	else
-		tab = ft_split(",", '/');
+		return (NULL);
 	if (!tab)
 		return (NULL);
 	path = NULL;

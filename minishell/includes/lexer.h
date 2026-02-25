@@ -74,7 +74,6 @@ char	*extract_word(char *line, t_shell *shell, t_lexer *lexer);
 /* lexer_token */
 t_token	*create_token(t_shell *shell, t_type type, char *value);
 void	token_add_back(t_token **list, t_token *new_token);
-void	print_tokens(t_token *head);
 
 /* lexer_utils */
 void	init_lexer(t_lexer *lexer);

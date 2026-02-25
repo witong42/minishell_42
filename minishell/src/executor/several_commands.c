@@ -48,7 +48,6 @@ pid_t	process(t_shell *shell)
 		if (close(shell->exec->pipe[1]) < 0)
 			err_message(shell, "close", NULL, "Bad file descriptor");
 		shell->exec->old_pipe = shell->exec->pipe[0];
-		perror("STEP3");
 	}
 	return (ret);
 }

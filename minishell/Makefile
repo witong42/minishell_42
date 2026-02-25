@@ -27,7 +27,6 @@ SRC =	main.c utils/init.c \
 
 OBJ = $(SRC:%.c=$(OBJ_DIR)/%.o)
 
-# SFLAGS = -fsanitize=address -g
 CFLAGS = -Wall -Wextra -Werror -I $(INC_DIR) -I $(LIBFT_DIR)
 LIBS = -L $(LIBFT_DIR) -lft -lreadline
 
@@ -50,14 +49,14 @@ $(OBJ_DIR):
 
 clean:
 	@make -C $(LIBFT_DIR) clean
-	@rm -rf $(OBJ_DIR) $(BONUS_OBJ_DIR)
+	@rm -rf $(OBJ_DIR)
 	@echo "${GREEN}Files clean up done.${DEF_COLOR}"
 
 fclean: clean
 	@make -C $(LIBFT_DIR) fclean
-	@rm -rf $(NAME) $(NAME_BONUS)
+	@rm -rf $(NAME)
 	@echo "${GREEN}Clean up done.${DEF_COLOR}"
 
 re: fclean all
 
-.PHONY: all bonus clean fclean re
+.PHONY: all clean fclean re

@@ -97,7 +97,6 @@ void	exit_err(t_shell *shell)
 
 void	simple_exit2(t_shell *shell, int code)
 {
-	perror("");
 	code = shell->last_status;
 	cleanup_all(shell);
 	free_array(shell->envp);
